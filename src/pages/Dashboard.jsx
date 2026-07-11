@@ -7,6 +7,8 @@ import { QRCodeSVG } from 'qrcode.react';
 import { toast } from 'react-toastify';
 
 function Dashboard() {
+  const PUBLIC_ASSET_BASE_URL = 'https://hackhatoon-project-02-git-main-faizan-bahi.vercel.app';
+
   const generateRandomCode = () => {
     return 'REQ-' + Math.floor(100000 + Math.random() * 900000);
   };
@@ -245,7 +247,7 @@ function Dashboard() {
                     </td>
                     <td style={styles.td}>
                       <div style={{ display: 'flex', gap: '8px' }}>
-                        <button className="miq-btn-qr" onClick={() => setSelectedQR(`${window.location.origin}/asset/${asset.id}`)} style={styles.qrViewBtn}>👁️ QR</button>
+                        <button className="miq-btn-qr" onClick={() => setSelectedQR(`${PUBLIC_ASSET_BASE_URL}/asset/${asset.id}`)} style={styles.qrViewBtn}>👁️ QR</button>
                         <button className="miq-btn-delete" onClick={() => handleDeleteAsset(asset.id)} style={styles.deleteBtn}>🗑️ Delete</button>
                       </div>
                     </td>
