@@ -1,5 +1,5 @@
 import React from 'react';
-import Routing from './route/routing';
+import Routing from './route/Routing';
 
 // React Toastify ke styles aur container import karein
 import { ToastContainer } from 'react-toastify';

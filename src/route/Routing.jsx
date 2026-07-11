@@ -1,9 +1,9 @@
 import React from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import Register from '../pages/register'
-import LoginPage from '../pages/loginpage'
+import LoginPage from '../pages/LoginPage'
 import Dashboard from '../pages/Dashboard'
-import PublicAsset from '../pages/PublicAsset' // Agar error aaye toh isko PublicAssest kar ke dekhna
+import PublicAsset from '../pages/PubliceAssest'
 import Home from '../pages/Home'
 
 function Routing() {
