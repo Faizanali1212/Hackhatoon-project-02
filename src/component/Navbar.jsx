@@ -4,6 +4,8 @@ import { auth } from '../firebase/firebase.js';
 import { signOut } from 'firebase/auth';
 import { toast } from 'react-toastify';
 
+const PUBLIC_PORTAL_PATH = '/public-assets';
+
 function Navbar() {
   const navigate = useNavigate();
   const user = auth.currentUser;
@@ -25,7 +27,7 @@ function Navbar() {
       </div>
       <div style={styles.links}>
         <Link to="/" style={styles.link}>Home</Link>
-        <Link to="/public-assets" style={styles.link}>Public Portal</Link>
+        <Link to={PUBLIC_PORTAL_PATH} style={styles.link}>Public Portal</Link>
         
         {user ? (
           <>
