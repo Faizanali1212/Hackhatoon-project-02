@@ -1,0 +1,26 @@
+import React from 'react'
+import { Routes, Route, Navigate } from 'react-router-dom'
+import Register from '../pages/register'
+import LoginPage from '../pages/loginpage'
+import Dashboard from '../pages/Dashboard'
+import PublicAsset from '../pages/PublicAsset' // Agar error aaye toh isko PublicAssest kar ke dekhna
+import Home from '../pages/Home'
+
+function Routing() {
+  return (
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/dashboard" element={<Dashboard />} />
+      
+      {/* Dynamic exact route path for QR access */}
+      <Route path="/asset/:assetId" element={<PublicAsset />} />
+      
+      {/* Catch-all route for safe fallback */}
+      <Route path="*" element={<Navigate to="/login" />} />
+    </Routes>
+  )
+}
+
+export default Routing
