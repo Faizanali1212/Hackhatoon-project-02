@@ -1,5 +1,5 @@
 import React from 'react'
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import Register from '../pages/register'
 import LoginPage from '../pages/LoginPage'
 import Dashboard from '../pages/Dashboard'
@@ -18,8 +18,8 @@ function Routing() {
       {/* Dynamic exact route path for QR access */}
       <Route path="/asset/:assetId" element={<PublicAsset />} />
       
-      {/* Catch-all route for safe fallback */}
-      <Route path="*" element={<Navigate to="/public-assets" replace />} />
+      {/* Catch-all stays public and renders the portal directly */}
+      <Route path="*" element={<PublicAsset />} />
     </Routes>
   )
 }
