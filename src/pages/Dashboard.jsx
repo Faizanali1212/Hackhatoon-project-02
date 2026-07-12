@@ -179,15 +179,32 @@ function Dashboard() {
           .miq-dashboard-header-actions { width: 100%; display: flex; justify-content: flex-start; }
           .miq-dashboard-card, .miq-dashboard-issues-card { padding: 20px !important; }
           .miq-dashboard-table-wrap { overflow-x: auto !important; -webkit-overflow-scrolling: touch; }
-          .miq-dashboard-table { min-width: 860px !important; }
+          .miq-dashboard-table { min-width: 860px !important; width: max-content !important; }
           .miq-dashboard-actions-cell { min-width: 180px; }
           .miq-dashboard-modal-content { width: calc(100vw - 32px); max-width: 420px; padding: 24px !important; }
+          .miq-dashboard-card, .miq-dashboard-issues-card { min-width: 0; }
+        }
+
+        @media (max-width: 600px) {
+          .miq-dashboard-stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 12px !important; }
+          .miq-dashboard-header { gap: 10px !important; }
+          .miq-dashboard-header-title { font-size: 20px !important; line-height: 1.2; }
+          .miq-dashboard-header-actions { justify-content: stretch; }
+          .miq-dashboard-header-actions .miq-btn-logout { width: 100%; }
+          .miq-dashboard-content-grid { gap: 16px !important; }
+          .miq-dashboard-table { min-width: 760px !important; }
+        }
+
+        @media (max-width: 420px) {
+          .miq-dashboard-stats-grid { grid-template-columns: 1fr !important; }
+          .miq-dashboard-stats-grid .miq-stat-card { min-width: 0; }
+          .miq-dashboard-card, .miq-dashboard-issues-card { padding: 18px !important; }
+          .miq-dashboard-table { min-width: 720px !important; }
         }
 
         @media (max-width: 520px) {
-          .miq-dashboard-stats-grid { grid-template-columns: 1fr !important; }
-          .miq-dashboard-header-title { font-size: 20px !important; }
-          .miq-dashboard-content-grid { gap: 16px !important; }
+          .miq-dashboard-stats-grid { gap: 12px !important; }
+          .miq-dashboard-header-title { font-size: 19px !important; }
         }
       `}</style>
 

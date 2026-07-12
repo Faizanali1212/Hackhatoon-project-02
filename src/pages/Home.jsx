@@ -32,6 +32,7 @@ function Home() {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
         * { box-sizing: border-box; }
+        html, body { overflow-x: hidden; }
         .miq-navlink { color: #B6C2E0; text-decoration: none; font-size: 14px; font-weight: 500; transition: color .15s ease; }
         .miq-navlink:hover { color: #ffffff; }
         .miq-primary-btn:hover { background-color: #1d4ed8 !important; transform: translateY(-1px); }
@@ -52,8 +53,11 @@ function Home() {
         }
 
         @media (max-width: 768px) {
-          .miq-home-nav-inner, .miq-home-footer-inner { flex-direction: column !important; align-items: flex-start !important; }
-          .miq-home-nav-actions { width: 100%; justify-content: flex-start !important; }
+          .miq-home-nav-inner { flex-direction: column !important; align-items: flex-start !important; gap: 12px !important; padding-left: 16px !important; padding-right: 16px !important; }
+          .miq-home-nav-links { display: none !important; }
+          .miq-home-nav-actions { width: 100%; flex-direction: column !important; align-items: stretch !important; gap: 8px !important; }
+          .miq-home-nav-actions .miq-ghost-btn, .miq-home-nav-actions .miq-primary-nav-btn { width: 100% !important; max-width: 240px !important; }
+          .miq-home-footer-inner { flex-direction: column !important; align-items: flex-start !important; }
           .miq-home-hero, .miq-home-stats-section, .miq-home-features-section, .miq-home-assets-section { padding-left: 16px !important; padding-right: 16px !important; }
           .miq-home-hero-inner, .miq-home-stats-grid, .miq-home-features-grid, .miq-home-assets-grid { grid-template-columns: 1fr !important; }
           .miq-home-trust-row { flex-wrap: wrap !important; gap: 12px !important; }
@@ -76,6 +80,11 @@ function Home() {
             <div style={styles.brandMark}>M</div>
             <span style={styles.brandName}>MaintainIQ</span>
           </div>
+          <div className="miq-home-nav-links" style={styles.navLinks}>
+            <a className="miq-navlink" href="#features">Features</a>
+            <a className="miq-navlink" href="#how-it-works">How it works</a>
+            <a className="miq-navlink" href="#contact">Contact</a>
+          </div>
           <div className="miq-home-nav-actions" style={styles.navActions}>
             <button
               className="miq-ghost-btn"
@@ -83,6 +92,13 @@ function Home() {
               style={styles.ghostBtn}
             >
               Admin Login
+            </button>
+            <button
+              className="miq-primary-nav-btn"
+              onClick={() => navigate('/dashboard')}
+              style={styles.primaryNavBtn}
+            >
+              Go to Dashboard
             </button>
           </div>
         </div>
@@ -216,6 +232,16 @@ function Home() {
         </div>
       </section>
 
+      <section id="how-it-works" style={{ ...styles.featuresSection, paddingTop: '0' }}>
+        <div className="miq-home-section-head-wrap" style={styles.sectionHeadWrap}>
+          <div style={styles.eyebrowDark}>HOW IT WORKS</div>
+          <h2 style={styles.sectionHeading}>A simple flow for teams and visitors</h2>
+          <p style={styles.sectionSubheading}>
+            Scan, review safe asset info, and navigate directly to the public asset page when needed.
+          </p>
+        </div>
+      </section>
+
       {/* Public Asset Showcase */}
       <section id="public-assets" className="miq-home-assets-section" style={styles.assetsSection}>
         <div className="miq-home-section-head-wrap" style={styles.sectionHeadWrap}>
@@ -270,7 +296,7 @@ function Home() {
       </section>
 
       {/* Footer */}
-      <footer style={styles.footer}>
+      <footer id="contact" style={styles.footer}>
         <div className="miq-home-footer-inner" style={styles.footerInner}>
           <div style={styles.brand}>
             <div style={styles.brandMark}>M</div>
