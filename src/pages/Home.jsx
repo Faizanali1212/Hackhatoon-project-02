@@ -7,7 +7,6 @@ import { QRCodeSVG } from 'qrcode.react';
 function Home() {
   const navigate = useNavigate();
   const [assets, setAssets] = useState([]);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     const fetchAssets = async () => {
@@ -60,9 +59,6 @@ function Home() {
         @media (max-width: 768px) {
           .miq-home-nav-inner { align-items: center !important; gap: 12px !important; padding-left: 16px !important; padding-right: 16px !important; }
           .miq-home-nav-links, .miq-home-nav-actions { display: none !important; }
-          .miq-home-menu-toggle { display: inline-flex !important; }
-          .miq-home-menu-panel { display: block !important; }
-          .miq-home-menu-panel[data-open='false'] { display: none !important; }
           .miq-home-footer-inner { flex-direction: column !important; align-items: flex-start !important; }
           .miq-home-hero, .miq-home-stats-section, .miq-home-features-section, .miq-home-assets-section { padding-left: 16px !important; padding-right: 16px !important; }
           .miq-home-hero-inner, .miq-home-stats-grid, .miq-home-features-grid, .miq-home-assets-grid { grid-template-columns: 1fr !important; }
@@ -86,11 +82,6 @@ function Home() {
             <div style={styles.brandMark}>M</div>
             <span style={styles.brandName}>MaintainIQ</span>
           </div>
-          <div className="miq-home-nav-links" style={styles.navLinks}>
-            <a className="miq-navlink" href="#features">Features</a>
-            <a className="miq-navlink" href="#how-it-works">How it works</a>
-            <a className="miq-navlink" href="#contact">Contact</a>
-          </div>
           <div className="miq-home-nav-actions" style={styles.navActions}>
             <button
               className="miq-ghost-btn"
@@ -99,48 +90,7 @@ function Home() {
             >
               Admin Login
             </button>
-            <button
-              className="miq-primary-nav-btn"
-              onClick={() => navigate('/dashboard')}
-              style={styles.primaryNavBtn}
-            >
-              Go to Dashboard
-            </button>
           </div>
-          <button
-            type="button"
-            className="miq-home-menu-toggle"
-            aria-label={isMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
-            aria-expanded={isMenuOpen}
-            onClick={() => setIsMenuOpen((open) => !open)}
-          >
-            {isMenuOpen ? '✕' : '☰'}
-          </button>
-        </div>
-        <div className="miq-home-menu-panel" data-open={isMenuOpen} style={styles.menuPanel}>
-          <a className="miq-home-menu-link" href="#features" onClick={() => setIsMenuOpen(false)}>Features</a>
-          <a className="miq-home-menu-link" href="#how-it-works" onClick={() => setIsMenuOpen(false)}>How it works</a>
-          <a className="miq-home-menu-link" href="#contact" onClick={() => setIsMenuOpen(false)}>Contact</a>
-          <button
-            className="miq-ghost-btn miq-home-menu-btn"
-            onClick={() => {
-              setIsMenuOpen(false);
-              navigate('/login');
-            }}
-            style={styles.ghostBtn}
-          >
-            Admin Login
-          </button>
-          <button
-            className="miq-primary-nav-btn miq-home-menu-btn"
-            onClick={() => {
-              setIsMenuOpen(false);
-              navigate('/dashboard');
-            }}
-            style={styles.primaryNavBtn}
-          >
-            Go to Dashboard
-          </button>
         </div>
       </nav>
 
@@ -194,7 +144,7 @@ function Home() {
                       key={i}
                       style={{
                         ...styles.qrCell,
-                        backgroundColor: [3,5,9,13,17,20,24,28,31,35,39,43,45].includes(i) ? '#0B1330' : 'transparent'
+                        backgroundColor: [3, 5, 9, 13, 17, 20, 24, 28, 31, 35, 39, 43, 45].includes(i) ? '#0B1330' : 'transparent'
                       }}
                     />
                   ))}
