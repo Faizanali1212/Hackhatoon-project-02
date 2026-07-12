@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { db, auth } from '../firebase/firebase.js';
-import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { collection, addDoc, getDocs, doc, updateDoc, writeBatch, query, where } from 'firebase/firestore';
 import { signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { QRCodeSVG } from 'qrcode.react';
 import { toast } from 'react-toastify';
 
 function Dashboard() {
-  const PUBLIC_ASSET_BASE_URL = 'https://hackhatoon-project-02-git-main-faizan-bahi.vercel.app';
-
   const generateRandomCode = () => {
     return 'REQ-' + Math.floor(100000 + Math.random() * 900000);
   };
@@ -78,7 +76,21 @@ function Dashboard() {
   const handleDeleteAsset = async (id) => {
     if (window.confirm("Bahi, kya aap sach mein is asset ko delete karna chahte hain?")) {
       try {
-        await deleteDoc(doc(db, "assets", id));
+        const batch = writeBatch(db);
+
+        const issueSnapshot = await getDocs(query(collection(db, "issues"), where("assetId", "==", id)));
+        issueSnapshot.forEach((issueDoc) => {
+          batch.delete(issueDoc.ref);
+        });
+
+        const requestSnapshot = await getDocs(query(collection(db, "requests"), where("assetId", "==", id)));
+        requestSnapshot.forEach((requestDoc) => {
+          batch.delete(requestDoc.ref);
+        });
+
+        batch.delete(doc(db, "assets", id));
+        await batch.commit();
+
         toast.success("🗑️ Asset successfully deleted!");
         fetchData(); // Refresh list after deletion
       } catch (error) {
@@ -247,7 +259,7 @@ function Dashboard() {
                     </td>
                     <td style={styles.td}>
                       <div style={{ display: 'flex', gap: '8px' }}>
-                        <button className="miq-btn-qr" onClick={() => setSelectedQR(`${PUBLIC_ASSET_BASE_URL}/asset/${asset.id}`)} style={styles.qrViewBtn}>👁️ QR</button>
+                        <button className="miq-btn-qr" onClick={() => setSelectedQR(`${window.location.origin}/asset/${asset.id}`)} style={styles.qrViewBtn}>👁️ QR</button>
                         <button className="miq-btn-delete" onClick={() => handleDeleteAsset(asset.id)} style={styles.deleteBtn}>🗑️ Delete</button>
                       </div>
                     </td>
