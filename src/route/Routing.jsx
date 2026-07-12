@@ -3,7 +3,7 @@ import { Routes, Route } from 'react-router-dom'
 import Register from '../pages/register'
 import LoginPage from '../pages/LoginPage'
 import Dashboard from '../pages/Dashboard'
-import PublicAsset from '../pages/PubliceAssest'
+import PublicAsset from '../pages/PubliceAssest.jsx'
 import Home from '../pages/Home'
 
 function Routing() {
