@@ -1,8 +1,31 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '../firebase/firebase.js';
+import { QRCodeSVG } from 'qrcode.react';
 
 function Home() {
   const navigate = useNavigate();
+  const [assets, setAssets] = useState([]);
+
+  useEffect(() => {
+    const fetchAssets = async () => {
+      try {
+        const assetSnapshot = await getDocs(collection(db, 'assets'));
+        setAssets(assetSnapshot.docs.map((d) => ({ id: d.id, ...d.data() })));
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchAssets();
+  }, []);
+
+  const statusBadgeStyle = (status) => ({
+    ...styles.publicStatusBadge,
+    backgroundColor: status === 'Operational' ? '#DCFCE7' : '#FEE2E2',
+    color: status === 'Operational' ? '#16A34A' : '#DC2626',
+  });
 
   return (
     <div style={styles.page}>
@@ -17,16 +40,43 @@ function Home() {
         .miq-feature-card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px -8px rgba(15,23,42,0.12); border-color: #CBD5E1; }
         .miq-stat-card { transition: box-shadow .18s ease, border-color .18s ease; }
         .miq-stat-card:hover { box-shadow: 0 8px 20px -6px rgba(15,23,42,0.10); border-color: #CBD5E1; }
+        .miq-home-asset-card { transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease; }
+        .miq-home-asset-card:hover { transform: translateY(-3px); box-shadow: 0 14px 28px -12px rgba(15,23,42,0.12); border-color: #CBD5E1; }
+
+        @media (max-width: 1024px) {
+          .miq-home-hero { padding-bottom: 64px !important; }
+          .miq-home-hero-inner { grid-template-columns: 1fr !important; gap: 36px !important; }
+          .miq-home-hero-copy { text-align: center !important; }
+          .miq-home-btn-group, .miq-home-trust-row { justify-content: center !important; }
+          .miq-home-section-head-wrap { margin-bottom: 36px !important; }
+        }
+
+        @media (max-width: 768px) {
+          .miq-home-nav-inner, .miq-home-footer-inner { flex-direction: column !important; align-items: flex-start !important; }
+          .miq-home-nav-actions { width: 100%; justify-content: flex-start !important; }
+          .miq-home-hero, .miq-home-stats-section, .miq-home-features-section, .miq-home-assets-section { padding-left: 16px !important; padding-right: 16px !important; }
+          .miq-home-hero-inner, .miq-home-stats-grid, .miq-home-features-grid, .miq-home-assets-grid { grid-template-columns: 1fr !important; }
+          .miq-home-trust-row { flex-wrap: wrap !important; gap: 12px !important; }
+          .miq-home-trust-divider { display: none !important; }
+          .miq-home-preview-card { width: 100% !important; max-width: 320px !important; }
+          .miq-home-card, .miq-home-asset-card { padding: 24px 20px !important; }
+        }
+
+        @media (max-width: 520px) {
+          .miq-home-title { font-size: 34px !important; }
+          .miq-home-asset-qr-url { word-break: break-all !important; }
+          .miq-home-asset-meta-grid { grid-template-columns: 1fr !important; }
+        }
       `}</style>
 
       {/* Top Bar */}
       <nav style={styles.navbar}>
-        <div style={styles.navInner}>
+        <div className="miq-home-nav-inner" style={styles.navInner}>
           <div style={styles.brand}>
             <div style={styles.brandMark}>M</div>
             <span style={styles.brandName}>MaintainIQ</span>
           </div>
-          <div style={styles.navActions}>
+          <div className="miq-home-nav-actions" style={styles.navActions}>
             <button
               className="miq-ghost-btn"
               onClick={() => navigate('/login')}
@@ -39,34 +89,34 @@ function Home() {
       </nav>
 
       {/* Hero */}
-      <header style={styles.hero}>
-        <div style={styles.heroInner}>
-          <div style={styles.heroCopy}>
+      <header className="miq-home-hero" style={styles.hero}>
+        <div className="miq-home-hero-inner" style={styles.heroInner}>
+          <div className="miq-home-hero-copy" style={styles.heroCopy}>
             <div style={styles.eyebrow}>ASSET &amp; MAINTENANCE OPERATIONS</div>
-            <h1 style={styles.title}>
+            <h1 className="miq-home-title" style={styles.title}>
               Smart Asset Management,<br />built for real-time control.
             </h1>
             <p style={styles.subtitle}>
               MaintainIQ gives every asset a digital identity, turns field reports into
               structured issues with AI, and keeps your maintenance history a click away.
             </p>
-            <div style={styles.btnGroup}>
+            <div className="miq-home-btn-group" style={styles.btnGroup}>
               <button onClick={() => navigate('/login')} style={styles.primaryBtn}>
                 Admin Login
               </button>
             </div>
 
-            <div style={styles.trustRow}>
+            <div className="miq-home-trust-row" style={styles.trustRow}>
               <div style={styles.trustItem}>
                 <span style={styles.trustNumber}>1,248</span>
                 <span style={styles.trustLabel}>Assets tracked</span>
               </div>
-              <div style={styles.trustDivider} />
+              <div className="miq-home-trust-divider" style={styles.trustDivider} />
               <div style={styles.trustItem}>
                 <span style={styles.trustNumber}>2.4d</span>
                 <span style={styles.trustLabel}>Avg. resolution</span>
               </div>
-              <div style={styles.trustDivider} />
+              <div className="miq-home-trust-divider" style={styles.trustDivider} />
               <div style={styles.trustItem}>
                 <span style={styles.trustNumber}>99.2%</span>
                 <span style={styles.trustLabel}>Uptime SLA</span>
@@ -76,7 +126,7 @@ function Home() {
 
           {/* Signature widget: live asset preview card */}
           <div style={styles.heroVisual}>
-            <div style={styles.previewCard}>
+            <div className="miq-home-preview-card" style={styles.previewCard}>
               <div style={styles.previewHeader}>
                 <span style={styles.previewLabel}>Asset ID</span>
                 <span style={styles.statusPill}>● Operational</span>
@@ -104,8 +154,8 @@ function Home() {
       </header>
 
       {/* Metrics strip — mirrors the live dashboard */}
-      <section style={styles.statsSection}>
-        <div style={styles.statsGrid}>
+      <section className="miq-home-stats-section" style={styles.statsSection}>
+        <div className="miq-home-stats-grid" style={styles.statsGrid}>
           <div className="miq-stat-card" style={styles.statCard}>
             <span style={styles.statLabel}>Total Assets</span>
             <span style={styles.statValue}>1,248</span>
@@ -130,8 +180,8 @@ function Home() {
       </section>
 
       {/* Features Section */}
-      <section id="features" style={styles.featuresSection}>
-        <div style={styles.sectionHeadWrap}>
+      <section id="features" className="miq-home-features-section" style={styles.featuresSection}>
+        <div className="miq-home-section-head-wrap" style={styles.sectionHeadWrap}>
           <div style={styles.eyebrowDark}>CORE CAPABILITIES</div>
           <h2 style={styles.sectionHeading}>Everything your maintenance team needs</h2>
           <p style={styles.sectionSubheading}>
@@ -139,8 +189,8 @@ function Home() {
           </p>
         </div>
 
-        <div style={styles.grid}>
-          <div className="miq-feature-card" style={styles.card}>
+        <div className="miq-home-features-grid" style={styles.grid}>
+          <div className="miq-feature-card miq-home-card" style={styles.card}>
             <div style={styles.iconBadge}>📱</div>
             <h3 style={styles.cardTitle}>Instant QR Code Registry</h3>
             <p style={styles.cardText}>
@@ -148,7 +198,7 @@ function Home() {
             </p>
           </div>
 
-          <div className="miq-feature-card" style={styles.card}>
+          <div className="miq-feature-card miq-home-card" style={styles.card}>
             <div style={styles.iconBadge}>🤖</div>
             <h3 style={styles.cardTitle}>AI Issue Triage</h3>
             <p style={styles.cardText}>
@@ -156,7 +206,7 @@ function Home() {
             </p>
           </div>
 
-          <div className="miq-feature-card" style={styles.card}>
+          <div className="miq-feature-card miq-home-card" style={styles.card}>
             <div style={styles.iconBadge}>⚙️</div>
             <h3 style={styles.cardTitle}>Technician Control Panel</h3>
             <p style={styles.cardText}>
@@ -166,9 +216,62 @@ function Home() {
         </div>
       </section>
 
+      {/* Public Asset Showcase */}
+      <section id="public-assets" className="miq-home-assets-section" style={styles.assetsSection}>
+        <div className="miq-home-section-head-wrap" style={styles.sectionHeadWrap}>
+          <div style={styles.eyebrowDark}>PUBLIC ASSET ACCESS</div>
+          <h2 style={styles.sectionHeading}>Our Registered Assets</h2>
+          <p style={styles.sectionSubheading}>
+            Safe public asset details only: name, code, category, location, and status.
+          </p>
+        </div>
+
+        {assets.length === 0 ? (
+          <div style={styles.emptyState}>No registered assets are available yet.</div>
+        ) : (
+          <div className="miq-home-assets-grid" style={styles.assetsGrid}>
+            {assets.map((asset) => (
+              <article key={asset.id} className="miq-home-asset-card" style={styles.assetCard}>
+                <div style={styles.assetCardTop}>
+                  <div style={styles.assetHeadingGroup}>
+                    <span style={styles.assetCardLabel}>Asset Name</span>
+                    <h3 style={styles.assetCardTitle}>{asset.name}</h3>
+                  </div>
+                  <span style={statusBadgeStyle(asset.status)}>{asset.status || 'Unknown'}</span>
+                </div>
+
+                <div className="miq-home-asset-meta-grid" style={styles.assetMetaGrid}>
+                  <div>
+                    <span style={styles.assetMetaLabel}>Asset Code</span>
+                    <div style={styles.assetMetaValue}><code style={styles.publicCodeChip}>{asset.code}</code></div>
+                  </div>
+                  <div>
+                    <span style={styles.assetMetaLabel}>Category</span>
+                    <div style={styles.assetMetaValue}>{asset.category}</div>
+                  </div>
+                  <div>
+                    <span style={styles.assetMetaLabel}>Location</span>
+                    <div style={styles.assetMetaValue}>{asset.location}</div>
+                  </div>
+                </div>
+
+                <div style={styles.assetQrSection}>
+                  <div style={styles.assetQrFrame}>
+                    <QRCodeSVG value={`${window.location.origin}/asset/${asset.id}`} size={132} />
+                  </div>
+                  <p className="miq-home-asset-qr-url" style={styles.assetQrText}>
+                    {`${window.location.origin}/asset/${asset.id}`}
+                  </p>
+                </div>
+              </article>
+            ))}
+          </div>
+        )}
+      </section>
+
       {/* Footer */}
       <footer style={styles.footer}>
-        <div style={styles.footerInner}>
+        <div className="miq-home-footer-inner" style={styles.footerInner}>
           <div style={styles.brand}>
             <div style={styles.brandMark}>M</div>
             <span style={{ ...styles.brandName, color: '#ffffff' }}>MaintainIQ</span>
@@ -254,6 +357,24 @@ const styles = {
   iconBadge: { width: '46px', height: '46px', borderRadius: '10px', backgroundColor: '#EFF6FF', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '22px', marginBottom: '18px' },
   cardTitle: { fontSize: '17px', fontWeight: 700, color: TEXT_PRIMARY, margin: '0 0 10px 0' },
   cardText: { fontSize: '14.5px', color: TEXT_SECONDARY, lineHeight: 1.65, margin: 0 },
+
+  /* Public assets */
+  assetsSection: { padding: '32px 24px 88px', maxWidth: '1200px', margin: '0 auto' },
+  assetsGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' },
+  assetCard: { backgroundColor: '#ffffff', padding: '24px', borderRadius: '14px', border: `1px solid ${BORDER}`, textAlign: 'left' },
+  assetCardTop: { display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '16px', marginBottom: '18px' },
+  assetHeadingGroup: { minWidth: 0 },
+  assetCardLabel: { display: 'block', fontSize: '11px', fontWeight: 700, letterSpacing: '0.08em', color: TEXT_SECONDARY, textTransform: 'uppercase', marginBottom: '6px' },
+  assetCardTitle: { fontSize: '18px', fontWeight: 800, color: TEXT_PRIMARY, margin: 0, letterSpacing: '-0.01em' },
+  publicStatusBadge: { padding: '4px 10px', borderRadius: '999px', fontSize: '12px', fontWeight: 700, display: 'inline-block', whiteSpace: 'nowrap' },
+  assetMetaGrid: { display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: '14px', backgroundColor: '#F8FAFC', border: `1px solid ${BORDER}`, borderRadius: '12px', padding: '16px', marginBottom: '18px' },
+  assetMetaLabel: { display: 'block', fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: TEXT_SECONDARY, marginBottom: '6px' },
+  assetMetaValue: { fontSize: '14px', color: TEXT_PRIMARY, fontWeight: 600, minWidth: 0 },
+  publicCodeChip: { backgroundColor: '#EEF2FF', color: BLUE, padding: '3px 8px', borderRadius: '6px', fontSize: '12.5px', fontWeight: 700 },
+  assetQrSection: { display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' },
+  assetQrFrame: { backgroundColor: '#F8FAFC', border: `1px solid ${BORDER}`, borderRadius: '12px', padding: '14px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' },
+  assetQrText: { margin: 0, fontSize: '12px', color: TEXT_SECONDARY, textAlign: 'center' },
+  emptyState: { padding: '22px 18px', borderRadius: '12px', border: `1px dashed ${BORDER}`, backgroundColor: '#ffffff', textAlign: 'center', color: TEXT_SECONDARY, fontSize: '14px' },
 
   /* Footer */
   footer: { backgroundColor: NAVY_SOFT, padding: '28px 24px' },

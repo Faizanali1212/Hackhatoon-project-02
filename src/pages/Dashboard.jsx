@@ -167,19 +167,43 @@ function Dashboard() {
         .miq-stat-card { transition: box-shadow .15s ease, border-color .15s ease; }
         .miq-stat-card:hover { box-shadow: 0 8px 20px -8px rgba(15,23,42,0.12); border-color: #CBD5E1; }
         input:focus { outline: none; border-color: #2563EB !important; box-shadow: 0 0 0 3px rgba(37,99,235,0.12); }
+
+        @media (max-width: 1024px) {
+          .miq-dashboard-content-grid { grid-template-columns: 1fr !important; }
+          .miq-dashboard-header { align-items: flex-start !important; gap: 14px !important; }
+        }
+
+        @media (max-width: 768px) {
+          .miq-dashboard-header { flex-direction: column !important; }
+          .miq-dashboard-stats-grid { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)) !important; }
+          .miq-dashboard-header-actions { width: 100%; display: flex; justify-content: flex-start; }
+          .miq-dashboard-card, .miq-dashboard-issues-card { padding: 20px !important; }
+          .miq-dashboard-table-wrap { overflow-x: auto !important; -webkit-overflow-scrolling: touch; }
+          .miq-dashboard-table { min-width: 860px !important; }
+          .miq-dashboard-actions-cell { min-width: 180px; }
+          .miq-dashboard-modal-content { width: calc(100vw - 32px); max-width: 420px; padding: 24px !important; }
+        }
+
+        @media (max-width: 520px) {
+          .miq-dashboard-stats-grid { grid-template-columns: 1fr !important; }
+          .miq-dashboard-header-title { font-size: 20px !important; }
+          .miq-dashboard-content-grid { gap: 16px !important; }
+        }
       `}</style>
 
       {/* Top Bar */}
-      <div style={styles.header}>
+      <div className="miq-dashboard-header" style={styles.header}>
         <div>
           <span style={styles.eyebrow}>MAINTAINIQ</span>
-          <h2 style={styles.headerTitle}>Admin Control Panel</h2>
+          <h2 className="miq-dashboard-header-title" style={styles.headerTitle}>Admin Control Panel</h2>
         </div>
-        <button className="miq-btn-logout" onClick={handleLogout} style={styles.logoutBtn}>Logout</button>
+        <div className="miq-dashboard-header-actions">
+          <button className="miq-btn-logout" onClick={handleLogout} style={styles.logoutBtn}>Logout</button>
+        </div>
       </div>
 
       {/* Summary Metric Cards */}
-      <div style={styles.statsGrid}>
+      <div className="miq-dashboard-stats-grid" style={styles.statsGrid}>
         <div className="miq-stat-card" style={styles.statCard}>
           <span style={styles.statLabel}>Total Assets</span>
           <span style={styles.statValue}>{assets.length}</span>
@@ -199,8 +223,8 @@ function Dashboard() {
         </div>
       </div>
 
-      <div style={styles.contentGrid}>
-        <div style={styles.card}>
+      <div className="miq-dashboard-content-grid" style={styles.contentGrid}>
+        <div className="miq-dashboard-card" style={styles.card}>
           <h3 style={styles.cardTitle}>Register New Asset</h3>
           <form onSubmit={handleCreateAsset} style={styles.form}>
             <div>
@@ -229,10 +253,10 @@ function Dashboard() {
           </form>
         </div>
 
-        <div style={styles.card}>
+        <div className="miq-dashboard-card" style={styles.card}>
           <h3 style={styles.cardTitle}>Registered System Assets</h3>
-          <div style={styles.tableWrap}>
-            <table style={styles.table}>
+          <div className="miq-dashboard-table-wrap" style={styles.tableWrap}>
+            <table className="miq-dashboard-table" style={styles.table}>
               <thead>
                 <tr style={styles.theadRow}>
                   <th style={styles.th}>Code</th>
@@ -257,8 +281,8 @@ function Dashboard() {
                         {asset.status}
                       </span>
                     </td>
-                    <td style={styles.td}>
-                      <div style={{ display: 'flex', gap: '8px' }}>
+                    <td className="miq-dashboard-actions-cell" style={styles.td}>
+                      <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                         <button className="miq-btn-qr" onClick={() => setSelectedQR(`${window.location.origin}/asset/${asset.id}`)} style={styles.qrViewBtn}>👁️ QR</button>
                         <button className="miq-btn-delete" onClick={() => handleDeleteAsset(asset.id)} style={styles.deleteBtn}>🗑️ Delete</button>
                       </div>
@@ -276,13 +300,13 @@ function Dashboard() {
         </div>
       </div>
 
-      <div style={{ ...styles.card, marginTop: '24px' }}>
+      <div className="miq-dashboard-issues-card" style={{ ...styles.card, marginTop: '24px' }}>
         <h3 style={styles.cardTitle}>📢 Live Maintenance Requests &amp; Issues Triage</h3>
         {issues.length === 0 ? (
           <p style={styles.emptyState}>No complaints submitted yet.</p>
         ) : (
-          <div style={styles.tableWrap}>
-            <table style={styles.table}>
+          <div className="miq-dashboard-table-wrap" style={styles.tableWrap}>
+            <table className="miq-dashboard-table" style={styles.table}>
               <thead>
                 <tr style={styles.theadRow}>
                   <th style={styles.th}>Asset Code</th>
@@ -341,7 +365,7 @@ function Dashboard() {
 
       {selectedQR && (
         <div style={styles.modalOverlay} onClick={() => setSelectedQR(null)}>
-          <div style={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+            <div className="miq-dashboard-modal-content" style={styles.modalContent} onClick={(e) => e.stopPropagation()}>
             <h3 style={styles.modalTitle}>Asset Safe Public QR Code</h3>
             <div style={styles.qrFrame}>
               <QRCodeSVG value={selectedQR} size={180} />

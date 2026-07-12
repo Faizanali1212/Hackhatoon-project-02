@@ -115,10 +115,19 @@ function PublicAsset() {
   // Render direct selector view if no explicit assetId is targeted in the browser navigation bar
   if (!assetId && !asset) {
     return (
-      <div style={styles.page}>
-        <style>{fontImport}</style>
-        <div style={styles.centerWrap}>
-          <div style={styles.brandRow}>
+      <div className="miq-pa-page" style={styles.page}>
+        <style>{`${fontImport}
+        @media (max-width: 640px) {
+          .miq-pa-center { width: 100% !important; max-width: none !important; }
+          .miq-pa-card { padding: 22px 18px !important; }
+        }
+
+        @media (max-width: 520px) {
+          .miq-pa-page { padding: 20px 12px !important; }
+        }
+        `}</style>
+        <div className="miq-pa-center" style={styles.centerWrap}>
+          <div className="miq-pa-brand-row" style={styles.brandRow}>
             <div style={styles.brandMark}>M</div>
             <span style={styles.brandName}>MaintainIQ</span>
           </div>
@@ -160,20 +169,34 @@ function PublicAsset() {
   }
 
   return (
-    <div style={styles.page}>
-      <style>{fontImport}</style>
-      <div style={styles.centerWrap}>
-        <div style={styles.brandRow}>
+    <div className="miq-pa-page" style={styles.page}>
+      <style>{`${fontImport}
+      @media (max-width: 640px) {
+        .miq-pa-center { width: 100% !important; max-width: none !important; }
+        .miq-pa-card { padding: 22px 18px !important; }
+        .miq-pa-asset-info-box { padding: 14px 14px !important; }
+        .miq-pa-asset-info-header { flex-direction: column !important; align-items: flex-start !important; gap: 8px !important; }
+        .miq-pa-asset-info-row { flex-direction: column !important; align-items: flex-start !important; gap: 4px !important; }
+        .miq-pa-priority-group { flex-direction: column !important; }
+      }
+
+      @media (max-width: 520px) {
+        .miq-pa-page { padding: 20px 12px !important; }
+        .miq-pa-card-heading { font-size: 18px !important; }
+      }
+      `}</style>
+      <div className="miq-pa-center" style={styles.centerWrap}>
+        <div className="miq-pa-brand-row" style={styles.brandRow}>
           <div style={styles.brandMark}>M</div>
           <span style={styles.brandName}>MaintainIQ</span>
         </div>
 
-        <div style={styles.card}>
+        <div className="miq-pa-card" style={styles.card}>
           <span style={styles.eyebrow}>PUBLIC ASSET PORTAL</span>
 
           {/* Asset Information block */}
-          <div style={styles.assetInfoBox}>
-            <div style={styles.assetInfoHeader}>
+          <div className="miq-pa-asset-info-box" style={styles.assetInfoBox}>
+            <div className="miq-pa-asset-info-header" style={styles.assetInfoHeader}>
               <h4 style={styles.assetName}>{asset.name}</h4>
               <span style={{
                 ...styles.statusPill,
@@ -183,11 +206,11 @@ function PublicAsset() {
                 {asset.status}
               </span>
             </div>
-            <div style={styles.assetInfoRow}>
+            <div className="miq-pa-asset-info-row" style={styles.assetInfoRow}>
               <span style={styles.assetInfoLabel}>Code</span>
               <code style={styles.codeChip}>{asset.code}</code>
             </div>
-            <div style={styles.assetInfoRow}>
+            <div className="miq-pa-asset-info-row" style={styles.assetInfoRow}>
               <span style={styles.assetInfoLabel}>Location</span>
               <span style={styles.assetInfoValue}>{asset.location}</span>
             </div>
@@ -235,7 +258,7 @@ function PublicAsset() {
               />
 
               <label style={styles.label}>Priority</label>
-              <div style={styles.priorityGroup}>
+              <div className="miq-pa-priority-group" style={styles.priorityGroup}>
                 {['Low', 'Medium', 'High'].map((level) => (
                   <button
                     type="button"
@@ -316,7 +339,7 @@ const styles = {
   },
   loadingText: { fontSize: '14px', color: TEXT_SECONDARY, fontWeight: 600 },
 
-  centerWrap: { maxWidth: '420px', margin: '0 auto' },
+  centerWrap: { maxWidth: '420px', margin: '0 auto', width: '100%' },
   brandRow: { display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', marginBottom: '20px' },
   brandMark: { width: '28px', height: '28px', borderRadius: '8px', backgroundColor: BLUE, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '14px' },
   brandName: { fontSize: '17px', fontWeight: 700, color: NAVY, letterSpacing: '-0.01em' },
