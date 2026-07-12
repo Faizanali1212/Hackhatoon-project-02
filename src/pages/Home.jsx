@@ -34,6 +34,7 @@ function Home() {
             >
               Admin Login
             </button>
+          </div>
         </div>
       </nav>
 
