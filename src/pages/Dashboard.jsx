@@ -183,6 +183,7 @@ function Dashboard() {
           .miq-dashboard-actions-cell { min-width: 180px; }
           .miq-dashboard-modal-content { width: calc(100vw - 32px); max-width: 420px; padding: 24px !important; }
           .miq-dashboard-card, .miq-dashboard-issues-card { min-width: 0; }
+          .miq-issues-table .miq-issues-notes-input { min-width: 160px !important; width: 100% !important; }
         }
 
         @media (max-width: 600px) {
@@ -192,14 +193,15 @@ function Dashboard() {
           .miq-dashboard-header-actions { justify-content: stretch; }
           .miq-dashboard-header-actions .miq-btn-logout { width: 100%; }
           .miq-dashboard-content-grid { gap: 16px !important; }
-          .miq-dashboard-table { min-width: 760px !important; }
+          .miq-issues-table { min-width: 760px !important; }
+          .miq-issues-table th, .miq-issues-table td { font-size: 13px !important; }
         }
 
         @media (max-width: 420px) {
           .miq-dashboard-stats-grid { grid-template-columns: 1fr !important; }
           .miq-dashboard-stats-grid .miq-stat-card { min-width: 0; }
           .miq-dashboard-card, .miq-dashboard-issues-card { padding: 18px !important; }
-          .miq-dashboard-table { min-width: 720px !important; }
+          .miq-issues-table { min-width: 720px !important; }
         }
 
         @media (max-width: 520px) {
@@ -323,7 +325,7 @@ function Dashboard() {
           <p style={styles.emptyState}>No complaints submitted yet.</p>
         ) : (
           <div className="miq-dashboard-table-wrap" style={styles.tableWrap}>
-            <table className="miq-dashboard-table" style={styles.table}>
+            <table className="miq-dashboard-table miq-issues-table" style={styles.table}>
               <thead>
                 <tr style={styles.theadRow}>
                   <th style={styles.th}>Asset Code</th>
@@ -351,6 +353,7 @@ function Dashboard() {
                     <td style={styles.td}>
                       {issue.status !== 'Resolved' ? (
                         <input
+                          className="miq-issues-notes-input"
                           type="text"
                           placeholder="What did you fix? (e.g. Changed wire)"
                           value={techNotes[issue.id] || ''}
@@ -454,7 +457,7 @@ const styles = {
   issueTitle: { fontWeight: 600, color: TEXT_PRIMARY },
   issueDesc: { fontSize: '12.5px', color: TEXT_SECONDARY, marginTop: '2px' },
   resolvedNote: { fontStyle: 'italic', color: TEXT_SECONDARY, fontSize: '13px' },
-  tableInput: { width: '100%', padding: '8px 10px', borderRadius: '6px', border: `1px solid ${BORDER}`, fontSize: '13px', boxSizing: 'border-box', fontFamily: 'inherit' },
+  tableInput: { width: '100%', minWidth: '160px', padding: '8px 10px', borderRadius: '6px', border: `1px solid ${BORDER}`, fontSize: '13px', boxSizing: 'border-box', fontFamily: 'inherit' },
 
   /* Buttons */
   qrViewBtn: { backgroundColor: '#4B5563', color: '#fff', padding: '6px 12px', border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '12px', fontWeight: 600, transition: 'background-color .15s ease' },

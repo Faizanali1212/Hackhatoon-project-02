@@ -7,6 +7,7 @@ import { QRCodeSVG } from 'qrcode.react';
 function Home() {
   const navigate = useNavigate();
   const [assets, setAssets] = useState([]);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     const fetchAssets = async () => {
@@ -37,6 +38,10 @@ function Home() {
         .miq-navlink:hover { color: #ffffff; }
         .miq-primary-btn:hover { background-color: #1d4ed8 !important; transform: translateY(-1px); }
         .miq-ghost-btn:hover { background-color: rgba(255,255,255,0.08) !important; }
+        .miq-home-menu-toggle { display: none; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.16); background: rgba(255,255,255,0.04); color: #fff; font-size: 20px; cursor: pointer; flex-shrink: 0; }
+        .miq-home-menu-panel { display: none; }
+        .miq-home-menu-link { width: 100%; display: block; padding: 12px 14px; border-radius: 10px; background: rgba(255,255,255,0.04); color: #E2E8F0; text-decoration: none; font-size: 14px; font-weight: 600; min-height: 44px; line-height: 20px; }
+        .miq-home-menu-btn { width: 100%; min-height: 44px; justify-content: center; }
         .miq-feature-card { transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease; }
         .miq-feature-card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px -8px rgba(15,23,42,0.12); border-color: #CBD5E1; }
         .miq-stat-card { transition: box-shadow .18s ease, border-color .18s ease; }
@@ -53,10 +58,11 @@ function Home() {
         }
 
         @media (max-width: 768px) {
-          .miq-home-nav-inner { flex-direction: column !important; align-items: flex-start !important; gap: 12px !important; padding-left: 16px !important; padding-right: 16px !important; }
-          .miq-home-nav-links { display: none !important; }
-          .miq-home-nav-actions { width: 100%; flex-direction: column !important; align-items: stretch !important; gap: 8px !important; }
-          .miq-home-nav-actions .miq-ghost-btn, .miq-home-nav-actions .miq-primary-nav-btn { width: 100% !important; max-width: 240px !important; }
+          .miq-home-nav-inner { align-items: center !important; gap: 12px !important; padding-left: 16px !important; padding-right: 16px !important; }
+          .miq-home-nav-links, .miq-home-nav-actions { display: none !important; }
+          .miq-home-menu-toggle { display: inline-flex !important; }
+          .miq-home-menu-panel { display: block !important; }
+          .miq-home-menu-panel[data-open='false'] { display: none !important; }
           .miq-home-footer-inner { flex-direction: column !important; align-items: flex-start !important; }
           .miq-home-hero, .miq-home-stats-section, .miq-home-features-section, .miq-home-assets-section { padding-left: 16px !important; padding-right: 16px !important; }
           .miq-home-hero-inner, .miq-home-stats-grid, .miq-home-features-grid, .miq-home-assets-grid { grid-template-columns: 1fr !important; }
@@ -101,6 +107,40 @@ function Home() {
               Go to Dashboard
             </button>
           </div>
+          <button
+            type="button"
+            className="miq-home-menu-toggle"
+            aria-label={isMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+            aria-expanded={isMenuOpen}
+            onClick={() => setIsMenuOpen((open) => !open)}
+          >
+            {isMenuOpen ? '✕' : '☰'}
+          </button>
+        </div>
+        <div className="miq-home-menu-panel" data-open={isMenuOpen} style={styles.menuPanel}>
+          <a className="miq-home-menu-link" href="#features" onClick={() => setIsMenuOpen(false)}>Features</a>
+          <a className="miq-home-menu-link" href="#how-it-works" onClick={() => setIsMenuOpen(false)}>How it works</a>
+          <a className="miq-home-menu-link" href="#contact" onClick={() => setIsMenuOpen(false)}>Contact</a>
+          <button
+            className="miq-ghost-btn miq-home-menu-btn"
+            onClick={() => {
+              setIsMenuOpen(false);
+              navigate('/login');
+            }}
+            style={styles.ghostBtn}
+          >
+            Admin Login
+          </button>
+          <button
+            className="miq-primary-nav-btn miq-home-menu-btn"
+            onClick={() => {
+              setIsMenuOpen(false);
+              navigate('/dashboard');
+            }}
+            style={styles.primaryNavBtn}
+          >
+            Go to Dashboard
+          </button>
         </div>
       </nav>
 
@@ -334,6 +374,7 @@ const styles = {
   navActions: { display: 'flex', alignItems: 'center', gap: '10px' },
   ghostBtn: { backgroundColor: 'transparent', color: '#E2E8F0', border: '1px solid rgba(255,255,255,0.18)', padding: '9px 16px', borderRadius: '8px', fontSize: '14px', fontWeight: 600, cursor: 'pointer' },
   primaryNavBtn: { backgroundColor: BLUE, color: '#fff', border: 'none', padding: '9px 16px', borderRadius: '8px', fontSize: '14px', fontWeight: 600, cursor: 'pointer' },
+  menuPanel: { maxWidth: '1200px', margin: '0 auto', padding: '0 24px 14px 24px', display: 'grid', gap: '10px' },
 
   /* Hero */
   hero: { backgroundColor: '#ffffff', padding: '80px 24px', borderBottom: `1px solid ${BORDER}` },
