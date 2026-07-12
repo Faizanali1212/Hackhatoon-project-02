@@ -34,14 +34,6 @@ function Home() {
             >
               Admin Login
             </button>
-            <button
-              className="miq-primary-btn"
-              onClick={() => navigate('/dashboard')}
-              style={styles.primaryNavBtn}
-            >
-              Go to Dashboard
-            </button>
-          </div>
         </div>
       </nav>
 
