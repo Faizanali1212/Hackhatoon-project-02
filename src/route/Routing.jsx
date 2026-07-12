@@ -14,12 +14,7 @@ function Routing() {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/public-assets" element={<PublicAsset />} />
-      
-      {/* Dynamic exact route path for QR access */}
       <Route path="/asset/:assetId" element={<PublicAsset />} />
-      
-      {/* Catch-all stays public and renders the portal directly */}
-      <Route path="*" element={<PublicAsset />} />
     </Routes>
   )
 }
