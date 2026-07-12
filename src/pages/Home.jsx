@@ -54,9 +54,6 @@ function Home() {
               <button onClick={() => navigate('/login')} style={styles.primaryBtn}>
                 Admin Login
               </button>
-              <button onClick={() => navigate('/dashboard')} style={styles.secondaryBtn}>
-                Go to Dashboard
-              </button>
             </div>
 
             <div style={styles.trustRow}>
