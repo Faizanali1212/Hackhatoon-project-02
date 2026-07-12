@@ -20,7 +20,7 @@ function LoginPage() {
             setLoading(false);
 
             // Success Notification
-            toast.success('🔑 Login Kamyab! Dashboard par ja rahe hain...');
+            toast.success('🔑 Login successful! Redirecting to dashboard...');
 
             navigate('/dashboard');
         } catch (err) {

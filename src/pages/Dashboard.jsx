@@ -33,7 +33,7 @@ function Dashboard() {
       setIssues(issueSnapshot.docs.map(d => ({ id: d.id, ...d.data() })));
     } catch (error) {
       console.error(error);
-      toast.error("Data load karne mein masla hua.");
+      toast.error("Failed to load data.");
     }
   };
 
@@ -58,7 +58,7 @@ function Dashboard() {
         assetId: docRef.id,
         action: "Asset Registered",
         timestamp: new Date().toISOString(),
-        notes: `Asset ${assetName} register hua.`
+        notes: `Asset ${assetName} has been registered.`
       });
       toast.success("🎉 Asset successfully registered!");
       
@@ -74,7 +74,7 @@ function Dashboard() {
 
   // 🔥 ACTION: Delete Asset Function
   const handleDeleteAsset = async (id) => {
-    if (window.confirm("Bahi, kya aap sach mein is asset ko delete karna chahte hain?")) {
+    if (window.confirm("Are you sure you want to delete this asset?")) {
       try {
         const batch = writeBatch(db);
 
@@ -95,7 +95,7 @@ function Dashboard() {
         fetchData(); // Refresh list after deletion
       } catch (error) {
         console.error(error);
-        toast.error("Asset delete karne mein error aaya.");
+        toast.error("Error deleting asset.");
       }
     }
   };
